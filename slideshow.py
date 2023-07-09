@@ -4,6 +4,7 @@ import ffmpeg
 import multiprocessing
 import tempfile
 import os
+import sys
 from docopt import docopt
 
 # Take a list of images in order that they want to be displayed,
@@ -56,20 +57,11 @@ image_procs = []
 image_clips = []
 total_complete = 0
 for f in input_images:
-    probe = ffmpeg.probe(f)
-    img_stream = probe["streams"][0]
-    img_w = img_stream["width"]
-    img_h = img_stream["height"]
-
     img = ffmpeg.input(f, loop=1, t=1)
-
-    # Pick aspect ratio force direction based on the image size
-    force_direction = "decrease" if img_w >= width or img_h >= height else "increase"
-
     clip_output = tempfile.NamedTemporaryFile(prefix="ffmpeg-slideshow-py", suffix=".mp4")
     img = (
         img
-        .filter("scale", width, height, force_original_aspect_ratio=force_direction)
+        .filter("scale", width, height, force_original_aspect_ratio="decrease")
         .filter("pad", width, height, -1, -1)
         .filter("format", pix_fmts="yuv420p")
         .output(clip_output.name, **encoding_args)
@@ -91,15 +83,17 @@ for f in input_images:
 
         for d in done:
             _, err = d.communicate()
-            print(err.decode("utf8"))
-            d.terminate()
+            if len(err) > 0:
+                print(err.decode("utf8"))
+                sys.exit(1)
 
 print("All image -> video conversions running, waiting...")
 for p in image_procs:
     p.wait()
     _, err = p.communicate()
-    print(err.decode("utf8"))
-    p.terminate()
+    if len(err) > 0:
+        print(err.decode("utf8"))
+        sys.exit(1)
 
 print("All image -> video conversions complete")
 
