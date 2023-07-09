@@ -11,7 +11,7 @@ graph, allowing the second step with the complex filter graph to be processed mu
 
 # Example
 
-This [video example](https://youtu.be/UwBLugxc73Y) was produced from 3 images by running:
+This [example video](https://youtu.be/UwBLugxc73Y) was produced from 3 images by running:
 
 ```bash
 ./slideshow.py 5 1920 1080 out.mp4 DSCF9554.jpg DSCF9566.jpg DSCF9568.jpg
