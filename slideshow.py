@@ -31,7 +31,6 @@ encoding_args = {
     "b:v": "3500k",
     "c:v": args["-e"] if args["-e"] else "libx264"
 }
-print(encoding_args)
 
 fade_duration = int(args["-f"]) if args["-f"] else 1
 # Only count half the fade time as part of the slide time
@@ -41,7 +40,7 @@ height = int(args["<height>"])
 output = args["<output.mp4>"]
 
 input_images = []
-if "<file>" in args:
+if "<files>" in args:
     input_images = args["<files>"]
 else:
     dirname = os.path.dirname(args["-i"])
