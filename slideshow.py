@@ -61,7 +61,7 @@ for f in input_images:
     clip_output = tempfile.NamedTemporaryFile(prefix="ffmpeg-slideshow-py", suffix=".mp4")
     img = (
         img
-        .filter("scale", width, height, force_original_aspect_ratio="decrease")
+        .filter("scale", width, height, force_original_aspect_ratio="decrease", flags="bicubic")
         .filter("pad", width, height, -1, -1)
         .filter("format", pix_fmts="yuv420p")
         .output(clip_output.name, **encoding_args)
