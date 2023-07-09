@@ -1,0 +1,8 @@
+*.swp
+*.jpg
+*.png
+~$*
+__pycache__/
+test_output.xlsx
+*.zip
+*.mp4
